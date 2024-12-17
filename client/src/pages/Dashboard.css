@@ -79,6 +79,10 @@
   background-color: #2196f3;
   color: white;
 }
+.invest {
+  background-color: #1ca727;
+  color: white;
+}
 
 .action-buttons button:hover {
   opacity: 0.8;
@@ -125,4 +129,8 @@
 
 .expense {
   color: #f44336;
+}
+
+.Quote {
+  text-align: center;
 }

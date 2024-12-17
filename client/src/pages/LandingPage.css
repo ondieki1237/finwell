@@ -5,20 +5,21 @@
 
 .hero-section {
   display: flex;
-  justify-content: space-between;
-  padding: 60px 20px;
+  /* justify-content: space-between; */
+  padding: 60px 30px;
   background-color: #f4f8fb;
   align-items: center;
 }
 
 .hero-text {
-  width: 50%;
+  width: 60%;
 }
 
 .hero-text h1 {
-  font-size: 36px;
+  font-size: 56px;
   color: #2b3e50;
   margin-bottom: 20px;
+  margin-right: -200px;
 }
 
 .hero-text p {
@@ -53,6 +54,7 @@
 .hero-image img {
   width: 60%;
   border-radius: 10px;
+  padding-left: 30%;
 }
 
 .features-section {
@@ -119,4 +121,59 @@
 .step p {
   font-size: 16px;
   color: #66757f;
+}
+
+.testimonials-section {
+  padding: 50px 20px;
+  background-color: #fff;
+  text-align: center;
+}
+
+.testimonials h2 {
+  font-size: 30px;
+  color: #2b3e50;
+  margin-bottom: 40px;
+}
+
+.testimonials {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.testimonial {
+  width: 45%;
+  background-color: #f4f8fb;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.testimonial img {
+  width: 60px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+.testimonial h4 {
+  margin-top: 10px;
+  color: #2b3e50;
+}
+
+.footer {
+  text-align: center;
+  padding: 20px;
+  background-color: #2b3e50;
+  color: white;
+}
+
+.footer-links a {
+  color: #fff;
+  margin: 0 10px;
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
 }

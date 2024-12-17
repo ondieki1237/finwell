@@ -17,7 +17,8 @@ const Signup = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('User registered:', formData);
-    navigate('/login');  // After successful signup, navigate to login
+    // After successful signup, navigate to KYC page for first-time users
+    navigate('/kyc');
   };
 
   return (
