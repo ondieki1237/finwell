@@ -8,6 +8,7 @@ import Analytics from './pages/Analytics';
 import BlogFeed from './pages/BlogFeed';
 import LandingPage from './pages/LandingPage';
 import KYC from './pages/kycForm';
+import IncomeStream from './components/IncomeStream';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -28,6 +29,7 @@ const App = () => {
       <Routes>
         {/* Landing Page is accessible to everyone */}
         <Route path="/" element={<LandingPage />} />
+        <Route path="/incomestream" element={<IncomeStream />} />
 
         {/* Login Page */}
         <Route path="/login" element={<Login onLogin={handleLogin} />} />

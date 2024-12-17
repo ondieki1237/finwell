@@ -2,9 +2,9 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-// const routes = require('./routes'); 
+const routes = require('./routes/IncomeStreamRoutes'); 
 const bodyParser = require('body-parser');
-
+const IncomeStream = require('./models/IncomeStream');
 const app = express();
 const mongoString = process.env.DATABASE_URL;
 
@@ -18,6 +18,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 
 
+// Routes
+app.use('/api', routes);
 
 // Error Handler
 function errorHandler(err, req, res, next) {
