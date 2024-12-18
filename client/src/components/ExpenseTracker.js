@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const ExpenseTracker = ({ userId }) => {
+const ExpenseTracker = () => {
+  // Get the userId from localStorage
+  const [userId, setUserId] = useState(null);
+
+  // Initialize expense data
   const [expenseData, setExpenseData] = useState({
     date: '',
     description: '',
@@ -12,27 +16,48 @@ const ExpenseTracker = ({ userId }) => {
     amount: '',
     isRecurring: false,
     notes: '',
-    userId: userId, // Passed as a prop
   });
 
   const [expenses, setExpenses] = useState([]);
   const [totalExpenses, setTotalExpenses] = useState(0);
 
+  // Retrieve userId from localStorage when the component mounts
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+      setUserId(user.id);  // Set userId from localStorage
+    }
+  }, []);
+
   // Handle input changes
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+    // setExpenseData({
+    //   ...expenseData,
+    //   [name]: type === 'checkbox' ? checked : value,
+    // });
+    // If the name is amount, convert it to a number
+  if (name === "amount") {
     setExpenseData({
       ...expenseData,
-      [name]: type === 'checkbox' ? checked : value,
+      [name]: parseFloat(value) || 0, // Ensure it's a valid number
     });
+  } else {
+    setExpenseData({
+      ...expenseData,
+      [name]: type === "checkbox" ? checked : value,
+    });
+  }
   };
 
   // Fetch all expenses for the user
   const fetchExpenses = async () => {
     try {
-      const response = await axios.get(`/api/expenses/user/${userId}`);
-      setExpenses(response.data);
-      calculateTotalExpenses(response.data);
+      if (userId) {
+        const response = await axios.get(`http://localhost:5000/api/expenses/user/${userId}`);
+        setExpenses(response.data);
+        calculateTotalExpenses(response.data);
+      }
     } catch (error) {
       console.error('Error fetching expenses:', error);
     }
@@ -47,8 +72,15 @@ const ExpenseTracker = ({ userId }) => {
   // Handle form submission to add a new expense
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!userId) {
+      alert("Please log in to add an expense.");
+      return;
+    }
+
     try {
-      const response = await axios.post('/api/expenses', expenseData);
+      const newExpenseData = { ...expenseData, userId };
+      const response = await axios.post('http://localhost:5000/api/expenses', newExpenseData);
+      console.log(response.data);
       alert('Expense added successfully!');
       setExpenseData({
         date: '',
@@ -60,7 +92,6 @@ const ExpenseTracker = ({ userId }) => {
         amount: '',
         isRecurring: false,
         notes: '',
-        userId: userId,
       });
       fetchExpenses(); // Refresh the expense list
     } catch (error) {
@@ -72,7 +103,7 @@ const ExpenseTracker = ({ userId }) => {
   // Delete an expense
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`/api/expenses/${id}`);
+      await axios.delete(`http://localhost:5000/api/expenses/${id}`);
       alert('Expense deleted successfully!');
       fetchExpenses(); // Refresh the expense list
     } catch (error) {
@@ -81,10 +112,12 @@ const ExpenseTracker = ({ userId }) => {
     }
   };
 
-  // Fetch expenses on component mount
+  // Fetch expenses on component mount or when userId changes
   useEffect(() => {
-    fetchExpenses();
-  }, []);
+    if (userId) {
+      fetchExpenses();
+    }
+  }, [userId]);
 
   return (
     <div className="expense-tracker">

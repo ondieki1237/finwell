@@ -5,7 +5,11 @@ const mongoose = require('mongoose');
 exports.createIncomeStream = async (req, res) => {
   try {
     const { dateReceived, source, description, account, amount, category, isRecurring, userId } = req.body;
-
+    // Validate that amount is a number and dateReceived is valid
+    console.log(req.body)
+    if (isNaN(amount)) {
+      return res.status(400).json({ message: 'Amount must be a number' });
+    }
     const newIncomeStream = new IncomeStream({
       dateReceived,
       source,
@@ -16,7 +20,7 @@ exports.createIncomeStream = async (req, res) => {
       isRecurring,
       userId,
     });
-
+  console.log(newIncomeStream);
     const savedIncome = await newIncomeStream.save();
     res.status(201).json(savedIncome);
   } catch (err) {
@@ -70,13 +74,26 @@ exports.getTotalIncome = async (req, res) => {
   try {
     const { userId } = req.params;
 
+    // Validate if userId is valid
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: 'Invalid userId' });
+    }
+
+    // Perform aggregation to calculate total income
     const totalIncome = await IncomeStream.aggregate([
-      { $match: { userId: mongoose.Types.ObjectId(userId) } },
+      { $match: { userId: new mongoose.Types.ObjectId(userId) } },
       { $group: { _id: null, totalAmount: { $sum: '$amount' } } },
     ]);
 
+    // Send the response with the total amount or 0 if no data found
     res.status(200).json({ total: totalIncome[0]?.totalAmount || 0 });
   } catch (err) {
-    res.status(500).json({ message: 'Error calculating total income', error: err.message });
+    // Log the error for debugging
+    console.error('Error fetching total income:', err);
+    res.status(500).json({
+      message: 'Error calculating total income',
+      error: err.message,
+      stack: err.stack,  // Include the stack trace for more details
+    });
   }
 };

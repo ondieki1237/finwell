@@ -2,6 +2,7 @@ import React from 'react';
 import { FaWallet, FaArrowUp, FaArrowDown, FaChartLine, FaPlusCircle, FaAccusoft } from 'react-icons/fa';
 import './Dashboard.css';
 import QuoteButton from './QuoteButton';
+import { Link } from 'react-router-dom'; 
 
 const Dashboard = () => {
   // Dummy transaction data
@@ -49,9 +50,24 @@ const Dashboard = () => {
       <div/>
 
       <div className="action-buttons">
-        <button className="add-expense">
+        {/* <button className="add-expense">
           <FaPlusCircle /> Add Expense
+        </button> */}
+         <Link to="/expense-tracker">
+          <button className="add-expense">
+            <FaPlusCircle /> Add Expense
+          </button>
+        </Link>
+        <Link to="/incomestream">
+        <button className="add-wallet">
+          <FaWallet /> Add Income
         </button>
+        </Link>
+        <Link to="/budget">
+        <button className="add-wallet">
+          <FaWallet /> Budget
+        </button>
+        </Link>
         <button className="add-wallet">
           <FaWallet /> Add Wallet
         </button>

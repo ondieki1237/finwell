@@ -4,6 +4,7 @@ const Expense = require('../models/ExpenseStream');
 exports.addExpense = async (req, res) => {
   try {
     const expense = new Expense(req.body); // Assume the request body contains the expense data
+    console.log(req.body)
     await expense.save();
     res.status(201).json({ message: 'Expense added successfully', expense });
   } catch (error) {
@@ -15,8 +16,11 @@ exports.addExpense = async (req, res) => {
 exports.getUserExpenses = async (req, res) => {
   try {
     const { userId } = req.params;
+    console.log(userId);
     const expenses = await Expense.find({ userId }).sort({ date: -1 }); // Sort by most recent
+    console.log('Fetched Expenses:', expenses);
     res.status(200).json(expenses);
+    console.log(expenses);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch expenses', details: error.message });
   }

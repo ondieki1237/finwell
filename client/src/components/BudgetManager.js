@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './BudgetManager.css'; // Import the CSS file
 
-const BudgetManager = ({ userId }) => {
+const BudgetManager = () => {
+  // State to hold the userId
+  const [userId, setUserId] = useState(null);
   const [budgets, setBudgets] = useState([]);
   const [budgetData, setBudgetData] = useState({
     totalMonthlyLimit: '',
@@ -11,13 +13,22 @@ const BudgetManager = ({ userId }) => {
     notificationThreshold: 90,
   });
 
+  // Fetch userId from localStorage
   useEffect(() => {
-    fetchBudgets();
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+      setUserId(user.id);  // Set userId from localStorage
+    }
   }, []);
+  useEffect(() => {
+    if (userId) {
+      fetchBudgets();
+    }
+  }, [userId]);
 
   const fetchBudgets = async () => {
     try {
-      const response = await axios.get(`/budget/${userId}`);
+      const response = await axios.get(`http://localhost:5000/api/budget/${userId}`);
       setBudgets(response.data);
     } catch (error) {
       console.error('Error fetching budgets:', error);
@@ -46,7 +57,7 @@ const BudgetManager = ({ userId }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('/budget', { ...budgetData, userId });
+      await axios.post('http://localhost:5000/api/budget', { ...budgetData, userId });
       fetchBudgets();
       setBudgetData({
         totalMonthlyLimit: '',

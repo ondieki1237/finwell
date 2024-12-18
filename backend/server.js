@@ -2,10 +2,11 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const routes = require("./routes/IncomeStreamRoutes");
+const incomeRoutes = require('./routes/incomeRoutes');
+const expenseRoutes = require("./routes/expenseRoutes");
+const budgetRoutes = require("./routes/budgetRoutes");
 const userRoutes = require("./routes/userRoutes");
 const bodyParser = require("body-parser");
-const IncomeStream = require("./models/IncomeStream");
 const app = express();
 const mongoString = process.env.DATABASE_URL;
 const jwt = require("jsonwebtoken");
@@ -20,9 +21,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 
 // Routes
-app.use("/api", routes);
+app.use("/api", expenseRoutes);
 app.use('/api', userRoutes);  
-
+app.use('/api', incomeRoutes);
+app.use('/api', budgetRoutes);
 // Error Handler
 function errorHandler(err, req, res, next) {
   console.error(err.stack);

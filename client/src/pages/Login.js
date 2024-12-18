@@ -12,35 +12,31 @@ const Login = () => {
   const handleChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
   };
-
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:5000/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      const response = await fetch("http://localhost:5000/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(credentials),
       });
   
       const data = await response.json();
   
       if (!response.ok) {
-        throw new Error(data.message || 'Login failed');
+        console.error("[LOGIN ERROR] Response failed:", data.message);
+        throw new Error(data.message || "Login failed");
       }
   
-      console.log('Login successful:', data);
+      console.log("[LOGIN SUCCESS] Response:", data);
   
-      localStorage.setItem('token', data.token);
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
   
-      localStorage.setItem('user', JSON.stringify(data.user));
-  
-      navigate('/kyc');
+      navigate("/dashboard");
     } catch (err) {
       setError(err.message);
-      console.error('Error:', err.message); 
+      console.error("[LOGIN ERROR] Error during login:", err.message);
     }
   };
   

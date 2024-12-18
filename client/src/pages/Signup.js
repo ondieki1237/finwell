@@ -24,7 +24,7 @@ const Signup = () => {
 
       localStorage.setItem('token', response.data.token);
 
-      navigate('/login');
+      navigate('/kyc');
     } catch (err) {
       console.error('Error registering user:', err.response?.data?.message || err.message);
       setError(err.response?.data?.message || 'An error occurred');

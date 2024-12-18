@@ -37,6 +37,7 @@ const App = () => {
     localStorage.setItem('token', 'yourToken');  // Store token in localStorage
   };
 
+  
   // Function to mark KYC as completed
   const handleKYCComplete = () => {
     setIsFirstTimeUser(false); 
@@ -47,7 +48,6 @@ const App = () => {
     <Router>
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/incomestream" element={<IncomeStream />} />
         <Route path="/login" element={<Login onLogin={handleLogin} />} />
         <Route path="/signup" element={<Signup />} />
 
@@ -77,6 +77,9 @@ const App = () => {
             )
           }
         />
+        <Route path="/expense-tracker" element={<ExpenseTracker />} />
+        <Route path="/incomestream" element={<IncomeStream />} />
+        <Route path="/budget" element={<BudgetManager />} />
         <Route
           path="/analytics"
           element={
