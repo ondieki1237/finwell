@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Signup.css';  // Importing the CSS file
+import './Signup.css'; // Importing the CSS file
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -17,8 +17,9 @@ const Signup = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('User registered:', formData);
-    // After successful signup, navigate to KYC page for first-time users
-    navigate('/kyc');
+
+    // Pass the user's name to the Dashboard
+    navigate('/dashboard', { state: { username: formData.name } });
   };
 
   return (
@@ -50,7 +51,9 @@ const Signup = () => {
       </form>
 
       <div className="login-link">
-        <p>Already have an account? <a href="/login">Log In</a></p>
+        <p>
+          Already have an account? <a href="/login">Log In</a>
+        </p>
       </div>
     </div>
   );

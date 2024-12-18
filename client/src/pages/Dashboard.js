@@ -96,6 +96,9 @@ const Dashboard = () => {
       </div>
 
       <div className="action-buttons">
+        <button className="income-source">
+          <FaWallet />Income sources
+        </button>
         <button className="add-expense" onClick={() => setShowExpenseForm(true)}>
           <FaPlusCircle /> Add Expense
         </button>
