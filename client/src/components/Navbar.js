@@ -10,7 +10,7 @@ const Navbar = () => {
         <img src={logo} alt="FinWell Logo" className="logo" />
       </div>
       <ul className="navbar-links">
-        <li><Link to="/">Dashboard</Link></li>
+        <li><Link to="/dashboard">Dashboard</Link></li>
         <li><Link to="/analytics">Analytics</Link></li>
         <li><Link to="/blogfeed">BlogFeed</Link></li>
         <li><Link to="/login">Login</Link></li>

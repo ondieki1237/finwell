@@ -2,6 +2,7 @@ import React from 'react';
 import { FaWallet, FaArrowUp, FaArrowDown, FaChartLine, FaPlusCircle, FaAccusoft } from 'react-icons/fa';
 import './Dashboard.css';
 import QuoteButton from './QuoteButton';
+import InvestmentAreas from './Investment';
 
 const Dashboard = () => {
   // Dummy transaction data
@@ -45,7 +46,7 @@ const Dashboard = () => {
       {/* this is the quote section */}
       
       <div className="Quote"></div>
-       <QuoteButton />
+       <QuoteButton /> <InvestmentAreas />
       <div/>
 
       <div className="action-buttons">

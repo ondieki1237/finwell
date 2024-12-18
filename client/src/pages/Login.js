@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Login.css';  // Importing the CSS file
+import './Login.css'; // Importing the CSS file
 
-const Login = () => {
+const Login = ({ onLogin }) => {  // Accept onLogin as a prop
   const [credentials, setCredentials] = useState({ email: '', password: '' });
   const navigate = useNavigate();
 
@@ -12,8 +12,15 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Simulate successful login
     console.log('Logged in with:', credentials);
-    navigate('/');  // After login, navigate to the home page or dashboard
+
+    // Call the onLogin function passed as a prop
+    onLogin();
+
+    // Navigate to the Dashboard
+    navigate('/dashboard');
   };
 
   return (
