@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './Signup.css';  // Importing the CSS file
 
 const Signup = () => {
@@ -8,17 +9,26 @@ const Signup = () => {
     email: '',
     password: '',
   });
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('User registered:', formData);
-    // After successful signup, navigate to KYC page for first-time users
-    navigate('/kyc');
+    try {
+      const response = await axios.post('http://localhost:5000/api/register', formData);
+      console.log('User registered successfully:', response.data);
+
+      localStorage.setItem('token', response.data.token);
+
+      navigate('/login');
+    } catch (err) {
+      console.error('Error registering user:', err.response?.data?.message || err.message);
+      setError(err.response?.data?.message || 'An error occurred');
+    }
   };
 
   return (

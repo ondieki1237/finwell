@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Dashboard from './pages/Dashboard';
@@ -12,29 +13,40 @@ import IncomeStream from './components/IncomeStream';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isFirstTimeUser, setIsFirstTimeUser] = useState(true); // Track first-time users
+  const [isFirstTimeUser, setIsFirstTimeUser] = useState(true);
 
-  // Function to handle successful login
+ 
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const kycStatus = localStorage.getItem('kycCompleted');
+
+    if (token) {
+      setIsAuthenticated(true);
+    }
+
+    if (kycStatus === 'true') {
+      setIsFirstTimeUser(false);
+    }
+  }, []);
+
+ 
   const handleLogin = () => {
     setIsAuthenticated(true);
+    localStorage.setItem('token', 'yourToken');  // Store token in localStorage
   };
 
   // Function to mark KYC as completed
   const handleKYCComplete = () => {
-    setIsFirstTimeUser(false); // Mark KYC as completed
+    setIsFirstTimeUser(false); 
+    localStorage.setItem('kycCompleted', 'true');  
   };
 
   return (
     <Router>
       <Routes>
-        {/* Landing Page is accessible to everyone */}
         <Route path="/" element={<LandingPage />} />
         <Route path="/incomestream" element={<IncomeStream />} />
-
-        {/* Login Page */}
         <Route path="/login" element={<Login onLogin={handleLogin} />} />
-
-        {/* Signup Page */}
         <Route path="/signup" element={<Signup />} />
 
         {/* KYC Page, only shown for first-time users */}
