@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Dashboard from "./Dashboard"; // Import the Dashboard component
 import "./ProfilePage.css";
 
 const ProfilePage = () => {
@@ -40,6 +39,7 @@ const ProfilePage = () => {
 
   return (
     <div className={`profile-container ${darkMode ? "dark" : "light"}`}>
+      {/* Profile Header */}
       <div className="profile-header">
         <div className="profile-picture">
           <img src={profileImage} alt="Profile" />
@@ -54,10 +54,90 @@ const ProfilePage = () => {
         </div>
       </div>
 
-      {/* Pass the username to the Dashboard */}
-      <Dashboard username={userInfo.username} />
+      {/* Dark Mode Toggle */}
+      <div className="theme-toggle">
+        <label>
+          <span>Dark Mode</span>
+          <input
+            type="checkbox"
+            checked={darkMode}
+            onChange={toggleDarkMode}
+          />
+        </label>
+      </div>
+
+      {/* Profile Information */}
+      <div className="profile-sections">
+        <div className="section">
+          <h3>Account Details</h3>
+          <ul>
+            <li>Email: {userInfo.email}</li>
+            <li>Date of Birth: {userInfo.dob}</li>
+            <li>Location: {userInfo.location}</li>
+            <li>Account Created: {userInfo.accountCreated}</li>
+            <li>Last Login: {userInfo.lastLogin}</li>
+            <li>Status: {userInfo.accountStatus}</li>
+          </ul>
+        </div>
+
+        {/* Social Links */}
+        <div className="section">
+          <h3>Social Links</h3>
+          <ul>
+            <li>
+              Facebook: <a href={userInfo.socialLinks.facebook}>Profile</a>
+            </li>
+            <li>
+              Twitter: <a href={userInfo.socialLinks.twitter}>Profile</a>
+            </li>
+            <li>
+              LinkedIn: <a href={userInfo.socialLinks.linkedin}>Profile</a>
+            </li>
+          </ul>
+        </div>
+
+        {/* Security Settings */}
+        <div className="section">
+          <h3>Security Settings</h3>
+          <ul>
+            <li>Change Password</li>
+            <li>Two-Factor Authentication: Enabled</li>
+            <li>Change Security Pin</li>
+            <li>Log Out of All Devices</li>
+          </ul>
+        </div>
+
+        {/* Privacy & Notifications */}
+        <div className="section">
+          <h3>Privacy & Notifications</h3>
+          <ul>
+            <li>Email Notifications: Enabled</li>
+            <li>Data Privacy: Manage Settings</li>
+            <li>Cookie Preferences: Accept All</li>
+          </ul>
+        </div>
+
+        {/* Theme & Appearance */}
+        <div className="section">
+          <h3>Theme & Appearance</h3>
+          <ul>
+            <li>Dark Mode: {darkMode ? "On" : "Off"}</li>
+            <li>Language: English</li>
+          </ul>
+        </div>
+
+        {/* Account Management */}
+        <div className="section">
+          <h3>Account Management</h3>
+          <ul>
+            <li>Deactivate Account</li>
+            <li>Delete Account</li>
+          </ul>
+        </div>
+      </div>
     </div>
   );
 };
 
 export default ProfilePage;
+

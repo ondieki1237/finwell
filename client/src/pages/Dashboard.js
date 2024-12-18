@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaWallet, FaArrowUp, FaArrowDown, FaChartLine, FaPlusCircle, FaAccusoft } from 'react-icons/fa';
+import { FaWallet, FaArrowUp, FaArrowDown, FaChartLine, FaPlusCircle, FaMoneyBillWave, FaHandsHelping, FaChartBar } from 'react-icons/fa'; // Added new icons
 import './Dashboard.css';
 import QuoteButton from './QuoteButton';
 import InvestmentAreas from './Investment';
@@ -97,7 +97,7 @@ const Dashboard = () => {
 
       <div className="action-buttons">
         <button className="income-source">
-          <FaWallet />Income sources
+          <FaMoneyBillWave /> Income sources {/* Changed icon for Income Sources */}
         </button>
         <button className="add-expense" onClick={() => setShowExpenseForm(true)}>
           <FaPlusCircle /> Add Expense
@@ -106,7 +106,7 @@ const Dashboard = () => {
           <FaWallet /> Add Wallet
         </button>
         <button className="invest">
-          <FaWallet /> Invest
+          <FaHandsHelping /> Invest {/* Changed icon for Invest */}
         </button>
       </div>
 
