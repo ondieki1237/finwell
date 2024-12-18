@@ -8,46 +8,35 @@ import Analytics from './pages/Analytics';
 import BlogFeed from './pages/BlogFeed';
 import LandingPage from './pages/LandingPage';
 import KYC from './pages/kycForm';
+import ProfilePage from './pages/ProfilePage';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isFirstTimeUser, setIsFirstTimeUser] = useState(true); // Track first-time users
+  const [isFirstTimeUser, setIsFirstTimeUser] = useState(true);
 
-  // Function to handle successful login
   const handleLogin = () => {
     setIsAuthenticated(true);
   };
 
-  // Function to mark KYC as completed
   const handleKYCComplete = () => {
-    setIsFirstTimeUser(false); // Mark KYC as completed
+    setIsFirstTimeUser(false);
   };
 
   return (
     <Router>
       <Routes>
-        {/* Landing Page is accessible to everyone */}
         <Route path="/" element={<LandingPage />} />
-
-        {/* Login Page */}
         <Route path="/login" element={<Login onLogin={handleLogin} />} />
-
-        {/* Signup Page */}
         <Route path="/signup" element={<Signup />} />
 
-        {/* KYC Page, only shown for first-time users */}
         <Route
           path="/kyc"
           element={
-            isFirstTimeUser ? (
-              <KYC onComplete={handleKYCComplete} />
-            ) : (
-              <Navigate to="/dashboard" />
-            )
+            isFirstTimeUser ? <KYC onComplete={handleKYCComplete} /> : <Navigate to="/dashboard" />
           }
         />
 
-        {/* Protected Routes - Redirect to Login if not authenticated */}
+        {/* Protected Routes */}
         <Route
           path="/dashboard"
           element={
@@ -81,6 +70,19 @@ const App = () => {
               <>
                 <Navbar />
                 <BlogFeed />
+              </>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            isAuthenticated ? (
+              <>
+                <Navbar />
+                <ProfilePage />
               </>
             ) : (
               <Navigate to="/login" />

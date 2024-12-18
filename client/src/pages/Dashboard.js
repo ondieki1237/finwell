@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FaWallet, FaArrowUp, FaArrowDown, FaChartLine, FaPlusCircle, FaAccusoft } from 'react-icons/fa';
 import './Dashboard.css';
 import QuoteButton from './QuoteButton';
@@ -6,12 +6,49 @@ import InvestmentAreas from './Investment';
 
 const Dashboard = () => {
   // Dummy transaction data
-  const transactions = [
+  const [transactions, setTransactions] = useState([
     { id: 1, date: '2024-12-01', description: 'Rent', amount: -50.00, type: 'Expense' },
     { id: 2, date: '2024-12-02', description: 'Salary', amount: 2000.00, type: 'Income' },
     { id: 3, date: '2024-12-03', description: 'AnyokaEats', amount: -30.00, type: 'Expense' },
     { id: 4, date: '2024-12-04', description: 'Freelance Project', amount: 150.00, type: 'Income' },
-  ];
+  ]);
+
+  // State for handling the Add Expense form
+  const [showExpenseForm, setShowExpenseForm] = useState(false);
+  const [expenseForm, setExpenseForm] = useState({
+    date: '',
+    description: '',
+    category: '',
+    amount: '',
+    paymentMethod: '',
+  });
+
+  // Handle form input changes
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setExpenseForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // Handle form submission
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (expenseForm.date && expenseForm.description && expenseForm.category && expenseForm.amount && expenseForm.paymentMethod) {
+      const newTransaction = {
+        id: transactions.length + 1,
+        ...expenseForm,
+        amount: parseFloat(expenseForm.amount),
+        type: 'Expense',
+      };
+      setTransactions((prev) => [...prev, newTransaction]);
+      setShowExpenseForm(false); // Close form after submission
+      setExpenseForm({ date: '', description: '', category: '', amount: '', paymentMethod: '' }); // Reset form
+    } else {
+      alert('Please fill all fields.');
+    }
+  };
 
   return (
     <div className="dashboard">
@@ -43,23 +80,97 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* this is the quote section */}
-      
-      <div className="Quote"></div>
-       <QuoteButton /> <InvestmentAreas />
-      <div/>
+      {/* Quote and Investment Sections */}
+      <div className="Quote">
+        <QuoteButton />
+        <InvestmentAreas />
+      </div>
 
       <div className="action-buttons">
-        <button className="add-expense">
+        <button className="add-expense" onClick={() => setShowExpenseForm(true)}>
           <FaPlusCircle /> Add Expense
         </button>
         <button className="add-wallet">
           <FaWallet /> Add Wallet
         </button>
-                <button className="invest">
+        <button className="invest">
           <FaWallet /> Invest
         </button>
       </div>
+
+      {/* Add Expense Form Modal */}
+      {showExpenseForm && (
+        <div className="modal">
+          <div className="modal-content">
+            <h3>Add Expense</h3>
+            <form onSubmit={handleSubmit}>
+              <label>
+                Date:
+                <input
+                  type="date"
+                  name="date"
+                  value={expenseForm.date}
+                  onChange={handleChange}
+                  required
+                />
+              </label>
+              <label>
+                Description:
+                <input
+                  type="text"
+                  name="description"
+                  value={expenseForm.description}
+                  onChange={handleChange}
+                  required
+                />
+              </label>
+              <label>
+                Category:
+                <select
+                  name="category"
+                  value={expenseForm.category}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Select Category</option>
+                  <option value="Groceries">Groceries</option>
+                  <option value="Dining">Dining</option>
+                  <option value="Transportation">Transportation</option>
+                  <option value="Entertainment">Entertainment</option>
+                  <option value="Bills">Bills</option>
+                </select>
+              </label>
+              <label>
+                Amount:
+                <input
+                  type="number"
+                  name="amount"
+                  value={expenseForm.amount}
+                  onChange={handleChange}
+                  required
+                />
+              </label>
+              <label>
+                Payment Method:
+                <select
+                  name="paymentMethod"
+                  value={expenseForm.paymentMethod}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Select Payment Method</option>
+                  <option value="Cash">Cash</option>
+                  <option value="Credit Card">Credit Card</option>
+                  <option value="Debit Card">Debit Card</option>
+                  <option value="Bank Transfer">Bank Transfer</option>
+                </select>
+              </label>
+              <button type="submit">Submit</button>
+              <button type="button" onClick={() => setShowExpenseForm(false)}>Cancel</button>
+            </form>
+          </div>
+        </div>
+      )}
 
       <div className="transactions">
         <h3>Your Transactions</h3>
