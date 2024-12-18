@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaWallet, FaArrowUp, FaArrowDown, FaChartLine, FaPlusCircle, FaAccusoft } from 'react-icons/fa';
 import './Dashboard.css';
 import QuoteButton from './QuoteButton';
@@ -22,6 +22,15 @@ const Dashboard = () => {
     amount: '',
     paymentMethod: '',
   });
+
+  // Calculate total income and expenses
+  const totalIncome = transactions
+    .filter((transaction) => transaction.type === 'Income')
+    .reduce((acc, curr) => acc + curr.amount, 0);
+  
+  const totalExpenses = transactions
+    .filter((transaction) => transaction.type === 'Expense')
+    .reduce((acc, curr) => acc + curr.amount, 0);
 
   // Handle form input changes
   const handleChange = (e) => {
@@ -61,17 +70,17 @@ const Dashboard = () => {
         <div className="summary-card">
           <FaWallet className="summary-icon" />
           <h3>Total Balance</h3>
-          <p className="summary-value">0.00 GBP</p>
+          <p className="summary-value">{(totalIncome + totalExpenses).toFixed(2)} GBP</p>
         </div>
         <div className="summary-card">
           <FaArrowUp className="summary-icon" />
           <h3>Total Period Income</h3>
-          <p className="summary-value">0.00 GBP</p>
+          <p className="summary-value">{totalIncome.toFixed(2)} GBP</p>
         </div>
         <div className="summary-card">
           <FaArrowDown className="summary-icon" />
           <h3>Total Period Expenses</h3>
-          <p className="summary-value">0.00 GBP</p>
+          <p className="summary-value">{totalExpenses.toFixed(2)} GBP</p>
         </div>
         <div className="summary-card">
           <FaChartLine className="summary-icon" />
