@@ -9,6 +9,8 @@ import BlogFeed from './pages/BlogFeed';
 import LandingPage from './pages/LandingPage';
 import KYC from './pages/kycForm';
 import IncomeStream from './components/IncomeStream';
+import ExpenseTracker from './components/ExpenseTracker'
+import BudgetManager from './components/BudgetManager';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -30,6 +32,8 @@ const App = () => {
         {/* Landing Page is accessible to everyone */}
         <Route path="/" element={<LandingPage />} />
         <Route path="/incomestream" element={<IncomeStream />} />
+        <Route path="/expensetracker" element={<ExpenseTracker />} />
+        <Route path="/budget" element={<BudgetManager />} />
 
         {/* Login Page */}
         <Route path="/login" element={<Login onLogin={handleLogin} />} />

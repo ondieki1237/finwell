@@ -1,0 +1,96 @@
+/* Container Styling */
+.budget-manager-container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .budget-manager-header {
+    text-align: center;
+    color: #343a40;
+    margin-bottom: 20px;
+  }
+  
+  .budget-manager-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  /* Input & Select Styling */
+  .budget-manager-input,
+  .budget-manager-select {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+  }
+  
+  /* Button Styling */
+  .budget-manager-button {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: none;
+    background: #007bff;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .budget-manager-button:hover {
+    background: #0056b3;
+  }
+  
+  .budget-manager-button-secondary {
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid #007bff;
+    background: #fff;
+    color: #007bff;
+    cursor: pointer;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  
+  .budget-manager-button-secondary:hover {
+    background: #007bff;
+    color: #fff;
+  }
+  
+  /* Category Limits Styling */
+  .budget-manager-category-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  /* Budgets List Styling */
+  .budget-manager-budgets-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .budget-manager-budget-item {
+    background: #fff;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  
+  /* Category List Styling */
+  .budget-manager-category-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .budget-manager-category-item {
+    font-size: 14px;
+    color: #6c757d;
+  }
+  
