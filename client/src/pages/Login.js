@@ -1,26 +1,46 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Login.css'; // Importing the CSS file
+import './Login.css';  // Importing the CSS file
 
-const Login = ({ onLogin }) => {  // Accept onLogin as a prop
+const Login = ({ onLogin }) => {
   const [credentials, setCredentials] = useState({ email: '', password: '' });
+  const [error, setError] = useState(null); 
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Simulate successful login
-    console.log('Logged in with:', credentials);
-
-    // Call the onLogin function passed as a prop
-    onLogin();
-
-    // Navigate to the Dashboard
-    navigate('/dashboard');
+    try {
+      const response = await fetch("http://localhost:5000/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(credentials),
+      });
+  
+      const data = await response.json();
+  
+      if (!response.ok) {
+        console.error("[LOGIN ERROR] Response failed:", data.message);
+        throw new Error(data.message || "Login failed");
+      }
+  
+      console.log("[LOGIN SUCCESS] Response:", data);
+  
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+  
+      // Call the onLogin prop to update the parent component's state
+      onLogin(data.token, data.user);
+  
+      // Redirect to dashboard
+      navigate("/dashboard");
+    } catch (err) {
+      setError(err.message);
+      console.error("[LOGIN ERROR] Error during login:", err.message);
+    }
   };
 
   return (
@@ -47,6 +67,8 @@ const Login = ({ onLogin }) => {  // Accept onLogin as a prop
       <div className="signup-link">
         <p>Don't have an account? <a href="/signup">Sign Up</a></p>
       </div>
+
+      {error && <p className="error-message">{error}</p>}
     </div>
   );
 };

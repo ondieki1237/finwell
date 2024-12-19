@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { FaWallet, FaArrowUp, FaArrowDown, FaChartLine, FaPlusCircle, FaMoneyBillWave, FaHandsHelping, FaChartBar } from 'react-icons/fa'; // Added new icons
+import { FaWallet, FaArrowUp, FaArrowDown, FaChartLine, FaPlusCircle, FaMoneyBillWave, FaHandsHelping } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 import './Dashboard.css';
 import QuoteButton from './QuoteButton';
 import InvestmentAreas from './Investment';
@@ -13,6 +14,15 @@ const Dashboard = () => {
     { id: 4, date: '2024-12-04', description: 'Freelance Project', amount: 150.00, type: 'Income' },
   ]);
 
+  // Calculate total income and expenses
+  const totalIncome = transactions
+    .filter((transaction) => transaction.type === 'Income')
+    .reduce((acc, curr) => acc + curr.amount, 0);
+  
+  const totalExpenses = transactions
+    .filter((transaction) => transaction.type === 'Expense')
+    .reduce((acc, curr) => acc + curr.amount, 0);
+
   // State for handling the Add Expense form
   const [showExpenseForm, setShowExpenseForm] = useState(false);
   const [expenseForm, setExpenseForm] = useState({
@@ -22,15 +32,6 @@ const Dashboard = () => {
     amount: '',
     paymentMethod: '',
   });
-
-  // Calculate total income and expenses
-  const totalIncome = transactions
-    .filter((transaction) => transaction.type === 'Income')
-    .reduce((acc, curr) => acc + curr.amount, 0);
-  
-  const totalExpenses = transactions
-    .filter((transaction) => transaction.type === 'Expense')
-    .reduce((acc, curr) => acc + curr.amount, 0);
 
   // Handle form input changes
   const handleChange = (e) => {
@@ -96,12 +97,21 @@ const Dashboard = () => {
       </div>
 
       <div className="action-buttons">
-        <button className="income-source">
-          <FaMoneyBillWave /> Income sources {/* Changed icon for Income Sources */}
-        </button>
-        <button className="add-expense" onClick={() => setShowExpenseForm(true)}>
-          <FaPlusCircle /> Add Expense
-        </button>
+        <Link to="/expense-tracker">
+          <button className="add-expense">
+            <FaPlusCircle /> Add Expense
+          </button>
+        </Link>
+        <Link to="/incomestream">
+          <button className="income-source">
+            <FaMoneyBillWave /> Add Income
+          </button>
+        </Link>
+        <Link to="/budget">
+          <button className="budget">
+            <FaWallet /> Budget
+          </button>
+        </Link>
         <button className="add-wallet">
           <FaWallet /> Add Wallet
         </button>

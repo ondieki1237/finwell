@@ -21,15 +21,16 @@ const QuoteButton = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentQuoteIndex((prevIndex) => (prevIndex + 1) % quotes.length);
-    }, 4000); // Change quote every 4 seconds
+    }, 6000); // Change quote every 4 seconds
 
     return () => clearInterval(timer);
   }, [quotes.length]);
 
   return (
     <div className="quote-button">
-      <FaPowerOff className="power-icon" />
+      
       <div className="quote-content">
+        <FaPowerOff className="power-icon" />
         <p>
           <em>"{quotes[currentQuoteIndex].text}"</em>
         </p>
