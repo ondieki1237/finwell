@@ -35,6 +35,7 @@ exports.getIncomeStreams = async (req, res) => {
 
     const incomes = await IncomeStream.find({ userId }).sort({ dateReceived: -1 });
     res.status(200).json(incomes);
+    console.log(incomes);
   } catch (err) {
     res.status(500).json({ message: 'Error fetching income streams', error: err.message });
   }

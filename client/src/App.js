@@ -12,7 +12,8 @@ import KYC from './pages/kycForm';
 import IncomeStream from './components/IncomeStream';
 import ExpenseTracker from './components/ExpenseTracker'
 import BudgetManager from './components/BudgetManager';
-
+import ProfilePage from './/pages/ProfilePage';
+import Wallet from './components/Wallet';
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isFirstTimeUser, setIsFirstTimeUser] = useState(true);
@@ -51,19 +52,14 @@ const App = () => {
         <Route path="/login" element={<Login onLogin={handleLogin} />} />
         <Route path="/signup" element={<Signup />} />
 
-        {/* KYC Page, only shown for first-time users */}
         <Route
           path="/kyc"
           element={
-            isFirstTimeUser ? (
-              <KYC onComplete={handleKYCComplete} />
-            ) : (
-              <Navigate to="/dashboard" />
-            )
+            isFirstTimeUser ? <KYC onComplete={handleKYCComplete} /> : <Navigate to="/dashboard" />
           }
         />
 
-        {/* Protected Routes - Redirect to Login if not authenticated */}
+        {/* Protected Routes */}
         <Route
           path="/dashboard"
           element={
@@ -80,6 +76,7 @@ const App = () => {
         <Route path="/expense-tracker" element={<ExpenseTracker />} />
         <Route path="/incomestream" element={<IncomeStream />} />
         <Route path="/budget" element={<BudgetManager />} />
+        <Route path="/wallet" element={<Wallet />} />
         <Route
           path="/analytics"
           element={
@@ -100,6 +97,19 @@ const App = () => {
               <>
                 <Navbar />
                 <BlogFeed />
+              </>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            isAuthenticated ? (
+              <>
+                <Navbar />
+                <ProfilePage />
               </>
             ) : (
               <Navigate to="/login" />

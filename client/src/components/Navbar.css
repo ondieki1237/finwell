@@ -1,68 +1,43 @@
-/* General Navbar Styling */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: white;
-  padding: 10px 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
+/* Responsive Hamburger Menu and Dropdown */
 
-.navbar-title {
+/* Hamburger Menu Icon - Show on Small Screens */
+.menu-icon {
+  display: none; /* Hide by default */
   font-size: 1.8rem;
-  font-weight: bold;
   color: #333;
-  margin-left: 10px;
+  cursor: pointer;
+  position: absolute;
+  top: 15px; /* Adjust vertical position */
+  right: 20px; /* Adjust horizontal position */
+  z-index: 1000; /* Ensure the icon stays on top */
 }
 
-.logo-container {
-  display: flex;
-  align-items: center;
-}
-
-.logo {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  margin-right: 10px;
-}
-
-/* Navbar Links */
-.navbar-links {
-  display: flex;
-  list-style: none;
-}
-
-.navbar-links li {
-  margin-left: 20px;
-}
-
-.navbar-links a {
-  text-decoration: none;
-  color: #555;
-  font-weight: 500;
-  font-size: 1rem;
-  transition: color 0.3s ease;
-}
-
-.navbar-links a:hover {
-  color: #4caf50;  /* Green hover color */
-}
-
-/* Responsive Design */
+/* Navbar Links - Responsive for Smaller Screens */
 @media (max-width: 768px) {
-  .navbar {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 15px;
+  .menu-icon {
+    display: block; /* Show hamburger menu icon */
   }
 
   .navbar-links {
-    flex-direction: column;
-    margin-top: 10px;
+    display: none; /* Hide links by default */
+    position: absolute;
+    top: 60px; /* Dropdown position below the navbar */
+    right: 10px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    border-radius: 5px;
+    flex-direction: column; /* Stack links vertically */
+    width: 150px;
+    z-index: 999; /* Ensure dropdown stays above content */
+  }
+
+  .navbar-links.show {
+    display: flex; /* Show links when active */
   }
 
   .navbar-links li {
-    margin-bottom: 10px;
+    margin: 10px 0; /* Add spacing for vertical links */
+    text-align: center;
   }
 }

@@ -4,7 +4,7 @@ import './Login.css';  // Importing the CSS file
 
 
 
-const Login = () => {
+const Login = ({ onLogin }) => {  // Accept onLogin as a prop
   const [credentials, setCredentials] = useState({ email: '', password: '' });
   const [error, setError] = useState(null); 
   const navigate = useNavigate();

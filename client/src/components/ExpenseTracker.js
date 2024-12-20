@@ -70,35 +70,73 @@ const ExpenseTracker = () => {
   };
 
   // Handle form submission to add a new expense
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   if (!userId) {
+  //     alert("Please log in to add an expense.");
+  //     return;
+  //   }
+
+  //   try {
+  //     const newExpenseData = { ...expenseData, userId };
+  //     const response = await axios.post('http://localhost:5000/api/expenses', newExpenseData);
+  //     console.log(response.data);
+  //     alert('Expense added successfully!');
+  //     setExpenseData({
+  //       date: '',
+  //       description: '',
+  //       account: 'Cash',
+  //       category: 'Other',
+  //       subCategory: '',
+  //       paymentMethod: 'Cash',
+  //       amount: '',
+  //       isRecurring: false,
+  //       notes: '',
+  //     });
+  //     fetchExpenses(); // Refresh the expense list
+  //   } catch (error) {
+  //     console.error('Error adding expense:', error);
+  //     alert('Failed to add expense. Please try again.');
+  //   }
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!userId) {
       alert("Please log in to add an expense.");
       return;
     }
-
+  
     try {
       const newExpenseData = { ...expenseData, userId };
+  
+      // Make the API request to add the expense and deduct from wallet
       const response = await axios.post('http://localhost:5000/api/expenses', newExpenseData);
-      console.log(response.data);
-      alert('Expense added successfully!');
-      setExpenseData({
-        date: '',
-        description: '',
-        account: 'Cash',
-        category: 'Other',
-        subCategory: '',
-        paymentMethod: 'Cash',
-        amount: '',
-        isRecurring: false,
-        notes: '',
-      });
-      fetchExpenses(); // Refresh the expense list
+      
+      // Check the response status and inform the user
+      if (response.status === 201) {
+        alert('Expense added and payment deducted from wallet!');
+        setExpenseData({
+          date: '',
+          description: '',
+          account: 'Cash',
+          category: 'Other',
+          subCategory: '',
+          paymentMethod: 'Cash',
+          amount: '',
+          isRecurring: false,
+          notes: '',
+        });
+        fetchExpenses(); // Refresh the expense list
+      } else {
+        alert('Failed to add expense. Please try again.');
+      }
     } catch (error) {
       console.error('Error adding expense:', error);
       alert('Failed to add expense. Please try again.');
     }
   };
+  
 
   // Delete an expense
   const handleDelete = async (id) => {

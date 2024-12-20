@@ -1,0 +1,54 @@
+.wallet-container {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    max-width: 800px;
+    margin: auto;
+  }
+  
+  h2 {
+    font-size: 2rem;
+    text-align: center;
+  }
+  
+  .add-account,
+  .accounts {
+    margin-top: 20px;
+  }
+  
+  .add-account select,
+  .add-account input,
+  .add-account button {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px;
+    font-size: 1rem;
+  }
+  
+  button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  
+  button:disabled {
+    background-color: #ccc;
+  }
+  
+  .accounts {
+    margin-top: 20px;
+  }
+  
+  .accounts h4 {
+    font-size: 1.2rem;
+  }
+  
+  .total-balance {
+    margin-top: 20px;
+    font-size: 1.5rem;
+    text-align: center;
+  }
+  

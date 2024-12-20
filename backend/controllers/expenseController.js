@@ -1,16 +1,66 @@
-const Expense = require('../models/ExpenseStream');
+// const Expense = require('../models/ExpenseStream');
 
 // Add a new expense
+// exports.addExpense = async (req, res) => {
+//   try {
+//     const expense = new Expense(req.body); // Assume the request body contains the expense data
+//     console.log(req.body)
+//     await expense.save();
+//     res.status(201).json({ message: 'Expense added successfully', expense });
+//   } catch (error) {
+//     res.status(500).json({ error: 'Failed to add expense', details: error.message });
+//   }
+// };
+
+const Expense = require('../models/ExpenseStream');
+const Wallet = require('../models/Wallet');
+
+// Add a new expense and deduct from the wallet balance
 exports.addExpense = async (req, res) => {
   try {
-    const expense = new Expense(req.body); // Assume the request body contains the expense data
-    console.log(req.body)
+    const { userId, amount, account, category, paymentMethod } = req.body;
+
+    // Step 1: Create a new expense
+    const expense = new Expense(req.body);
     await expense.save();
-    res.status(201).json({ message: 'Expense added successfully', expense });
+
+    // Step 2: Deduct amount from the wallet
+    const wallet = await Wallet.findOne({ userId });
+
+    if (!wallet) {
+      return res.status(400).json({ error: 'Wallet not found for this user.' });
+    }
+
+    const accountToUpdate = wallet.accounts.find(acc => acc.accountType === account);
+    
+    if (!accountToUpdate || accountToUpdate.balance < amount) {
+      return res.status(400).json({ error: 'Insufficient funds in the selected account.' });
+    }
+
+    // Deduct the amount
+    accountToUpdate.balance -= amount;
+    
+    // Record the transaction in wallet
+    accountToUpdate.transactions.push({
+      type: 'Payment',
+      amount: amount,
+      description: `Expense payment for ${category} - ${paymentMethod}`,
+      accountType: account,
+      paymentType: 'Expense',
+    });
+
+    // Update the wallet total balance
+    wallet.totalBalance -= amount;
+    await wallet.save();
+
+    // Respond with the added expense
+    res.status(201).json({ message: 'Expense added and payment deducted successfully', expense });
   } catch (error) {
-    res.status(500).json({ error: 'Failed to add expense', details: error.message });
+    console.error(error);
+    res.status(500).json({ error: 'Failed to add expense and update wallet', details: error.message });
   }
 };
+
 
 // Fetch all expenses for a specific user
 exports.getUserExpenses = async (req, res) => {

@@ -6,10 +6,12 @@ const incomeRoutes = require('./routes/incomeRoutes');
 const expenseRoutes = require("./routes/expenseRoutes");
 const budgetRoutes = require("./routes/budgetRoutes");
 const userRoutes = require("./routes/userRoutes");
+const walletRoutes = require("./routes/walletRoutes");
 const bodyParser = require("body-parser");
 const app = express();
 const mongoString = process.env.DATABASE_URL;
 const jwt = require("jsonwebtoken");
+
 
 mongoose.connect(mongoString);
 const database = mongoose.connection;
@@ -25,6 +27,7 @@ app.use("/api", expenseRoutes);
 app.use('/api', userRoutes);  
 app.use('/api', incomeRoutes);
 app.use('/api', budgetRoutes);
+app.use('/api', walletRoutes);
 // Error Handler
 function errorHandler(err, req, res, next) {
   console.error(err.stack);

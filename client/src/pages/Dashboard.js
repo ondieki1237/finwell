@@ -1,17 +1,83 @@
-import React from 'react';
-import { FaWallet, FaArrowUp, FaArrowDown, FaChartLine, FaPlusCircle, FaAccusoft } from 'react-icons/fa';
+import React, { useState, useEffect } from 'react';
+import { FaWallet, FaArrowUp, FaArrowDown, FaChartLine, FaPlusCircle, FaMoneyBillWave, FaHandsHelping, FaChartBar } from 'react-icons/fa';
 import './Dashboard.css';
 import QuoteButton from './QuoteButton';
-import { Link } from 'react-router-dom'; 
+import InvestmentAreas from './Investment';
+import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
-  // Dummy transaction data
-  const transactions = [
-    { id: 1, date: '2024-12-01', description: 'Rent', amount: -50.00, type: 'Expense' },
-    { id: 2, date: '2024-12-02', description: 'Salary', amount: 2000.00, type: 'Income' },
-    { id: 3, date: '2024-12-03', description: 'AnyokaEats', amount: -30.00, type: 'Expense' },
-    { id: 4, date: '2024-12-04', description: 'Freelance Project', amount: 150.00, type: 'Income' },
-  ];
+  // State for holding all transactions (both income and expense)
+  const [transactions, setTransactions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [userId, setUserId] = useState(null);
+ // Retrieve userId from localStorage when the component mounts
+   useEffect(() => {
+     const user = JSON.parse(localStorage.getItem('user'));
+     if (user) {
+       setUserId(user.id);  // Set userId from localStorage
+     }
+   }, []);
+ 
+  // Fetch income and expenses data from API
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      try {
+        let incomeData = [];
+        let expenseData = [];
+  
+        if (userId) {
+          // Fetch income transactions
+          const incomeResponse = await fetch(`http://localhost:5000/api/income/${userId}`);
+          incomeData = await incomeResponse.json();
+          console.log('Fetched Income:', incomeData);  // Log the fetched income data
+  
+          // Fetch expense transactions
+          const expenseResponse = await fetch(`http://localhost:5000/api/expenses/user/${userId}`);
+          expenseData = await expenseResponse.json();
+          console.log('Fetched Expenses:', expenseData);  // Log the fetched expense data
+        }
+  
+        // Combine both income and expense data
+        const combinedTransactions = [
+          ...incomeData.map(item => ({
+            ...item,
+            type: 'Income',
+            amount: item.amount,
+            date: new Date(item.dateReceived),
+            description: item.description,
+          })),
+          ...expenseData.map(item => ({
+            ...item,
+            type: 'Expense',
+            amount: item.amount,
+            date: new Date(item.date),
+            description: item.description,
+          }))
+        ];
+  
+        // Sort combined transactions by date (latest first)
+        const sortedTransactions = combinedTransactions.sort((a, b) => b.date - a.date);
+  
+        // Set transactions state
+        setTransactions(sortedTransactions);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching transactions:', error);
+        setLoading(false);
+      }
+    };
+  
+    fetchTransactions();
+  }, [userId]);
+  
+  // Calculate total income and expenses
+  const totalIncome = transactions
+    .filter((transaction) => transaction.type === 'Income')
+    .reduce((acc, curr) => acc + curr.amount, 0);
+
+  const totalExpenses = transactions
+    .filter((transaction) => transaction.type === 'Expense')
+    .reduce((acc, curr) => acc + curr.amount, 0);
 
   return (
     <div className="dashboard">
@@ -24,17 +90,17 @@ const Dashboard = () => {
         <div className="summary-card">
           <FaWallet className="summary-icon" />
           <h3>Total Balance</h3>
-          <p className="summary-value">0.00 GBP</p>
+          <p className="summary-value">${(totalIncome - totalExpenses).toFixed(2)} </p>
         </div>
         <div className="summary-card">
           <FaArrowUp className="summary-icon" />
           <h3>Total Period Income</h3>
-          <p className="summary-value">0.00 GBP</p>
+          <p className="summary-value">${totalIncome.toFixed(2)} </p>
         </div>
         <div className="summary-card">
           <FaArrowDown className="summary-icon" />
           <h3>Total Period Expenses</h3>
-          <p className="summary-value">0.00 GBP</p>
+          <p className="summary-value">${totalExpenses.toFixed(2)}</p>
         </div>
         <div className="summary-card">
           <FaChartLine className="summary-icon" />
@@ -43,42 +109,44 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* this is the quote section */}
-      
-      <div className="Quote"></div>
-       <QuoteButton />
-      <div/>
+      {/* Quote and Investment Sections */}
+      <div className="Quote">
+        <QuoteButton />
+        <InvestmentAreas />
+      </div>
 
       <div className="action-buttons">
-        {/* <button className="add-expense">
-          <FaPlusCircle /> Add Expense
-        </button> */}
-         <Link to="/expense-tracker">
+        <Link to="/expense-tracker">
           <button className="add-expense">
             <FaPlusCircle /> Add Expense
           </button>
         </Link>
         <Link to="/incomestream">
-        <button className="add-wallet">
-          <FaWallet /> Add Income
-        </button>
+          <button className="add-wallet">
+            <FaWallet /> Add Income
+          </button>
         </Link>
         <Link to="/budget">
-        <button className="add-wallet">
-          <FaWallet /> Budget
-        </button>
+          <button className="add-wallet">
+            <FaWallet /> Budget
+          </button>
         </Link>
+        <Link to="/wallet">
         <button className="add-wallet">
           <FaWallet /> Add Wallet
         </button>
-                <button className="invest">
-          <FaWallet /> Invest
+        </Link>
+        <button className="invest">
+          <FaHandsHelping /> Invest
         </button>
       </div>
 
+      {/* Transactions Table */}
       <div className="transactions">
         <h3>Your Transactions</h3>
-        {transactions.length === 0 ? (
+        {loading ? (
+          <p>Loading transactions...</p>
+        ) : transactions.length === 0 ? (
           <p>You have no transactions.</p>
         ) : (
           <table className="transactions-table">
@@ -92,11 +160,11 @@ const Dashboard = () => {
             </thead>
             <tbody>
               {transactions.map((transaction) => (
-                <tr key={transaction.id}>
-                  <td>{transaction.date}</td>
+                <tr key={transaction._id}>
+                  <td>{new Date(transaction.date).toLocaleDateString()}</td>
                   <td>{transaction.description}</td>
                   <td className={transaction.type === 'Income' ? 'income' : 'expense'}>
-                    {transaction.amount.toFixed(2)} GBP
+                    ${transaction.amount.toFixed(2)}
                   </td>
                   <td>{transaction.type}</td>
                 </tr>
